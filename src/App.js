@@ -31,7 +31,7 @@ fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=$
   .then((data) => {
     // alert(`10 GBP = ${data.rates.USD} USD`);
     
-    const ConvertedAmount = data.rates[currency1];
+    const ConvertedAmount = data.rates[currency1]; // data.rates[currency1] use braket method whenever passing the string value
     console.log(currency1);
     setState({...state, ConvertedAmount, loading:false })
     console.log(data);
