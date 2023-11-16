@@ -3,13 +3,14 @@ import './App.css';
 
 const initialState = {
   currency:'CAD',
+  currency1:'INR',
   amount:'',
   ConvertedAmount:'',
   loading:false,
 }
 function App() {
   const[state , setState] = useState(initialState);
-  const{currency , amount, ConvertedAmount,loading} = state;
+  const{currency,currency1 , amount, ConvertedAmount,loading} = state;
   // const[amount , setAmount] = useState('');
 
   // get currency value
@@ -25,11 +26,13 @@ function App() {
 e.preventDefault();
 setState({...state , loading:true})
 try {
-fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=INR`)
+fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=${currency1}`)
   .then(resp => resp.json())
   .then((data) => {
     // alert(`10 GBP = ${data.rates.USD} USD`);
-    const ConvertedAmount = data.rates.INR;
+    
+    const ConvertedAmount = data.rates[currency1];
+    console.log(currency1);
     setState({...state, ConvertedAmount, loading:false })
     console.log(data);
   });
@@ -47,8 +50,18 @@ fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=I
           <label htmlFor="amount">Enter  Amount:</label>
           <input type="number" name='amount' id='amount' onChange={getValues} value={amount} />
           
-          <label htmlFor="currency">Select Currency</label>
+          <label htmlFor="currency">Currency </label>
           <select name="currency" id="currency" value={currency} onChange={getValues}>
+            
+            <option value="CAD">CAD</option>
+            <option value="GBP">GBP</option>
+            <option value="AUD">AUD</option>
+            <option value="INR">INR</option>
+          </select>
+          {/* convert into */}
+          <br />
+           <label htmlFor="currency1">Currency Convert Into:</label>
+          <select name="currency1" id="currency1" value={currency1} onChange={getValues}>
             
             <option value="CAD">CAD</option>
             <option value="GBP">GBP</option>
@@ -58,7 +71,7 @@ fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=I
           <br />
           <button onClick={ConvertCurrency}>{loading ? 'Converting' : 'Convert'}</button>
           <br />
-          <label htmlFor="Convamount">USD</label>
+          <label htmlFor="Convamount">Converted Amount:</label>
           <input type="number" name='Convertedamount' id='Convamount' disabled value={ConvertedAmount} />
         </form>
       </div>
